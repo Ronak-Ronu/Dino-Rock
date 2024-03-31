@@ -416,7 +416,7 @@ export class PlayGround extends Phaser.Scene{
                     orange_note.destroy();
                 }else{
                     beep.play();
-                    music.setVolume(0.2);
+                    // music.setVolume(0.2);
                     console.log("MISSED");
                     scores--;
                     scoreText.setText(`Points : ${scores}`)
@@ -440,7 +440,7 @@ export class PlayGround extends Phaser.Scene{
          
             } else {
                 beep.play();
-                music.setVolume(0.2);
+                // music.setVolume(0.2);
                 console.log("MISSED");
                 scores--;
                 scoreText.setText(`Points : ${scores}`)
@@ -458,7 +458,7 @@ export class PlayGround extends Phaser.Scene{
 
             if (pink_note &&  Phaser.Geom.Intersects.RectangleToRectangle(pink_note.getBounds(), note_btn3.getBounds())) {
                 console.log("PERFECT PINK");
-                music.setVolume(0.5); 
+                // music.setVolume(0.5); 
                 pink_note.destroy();
             } else {
                 beep.play();
