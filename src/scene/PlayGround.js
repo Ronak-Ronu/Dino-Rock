@@ -30,12 +30,13 @@ export class PlayGround extends Phaser.Scene{
     create(){
 
 
+
         let scoreText = this.add.text(16, 16, "Points: 0", {
-            fontSize: '40px',
+            fontSize: '45px',
             fill: '#fff'
           }).setDepth(1);
           
-          scoreText.setPosition(100,50)
+        scoreText.setPosition(100,50)
         let scores=0;
 
         let music=this.sound.add("music1");
@@ -44,7 +45,6 @@ export class PlayGround extends Phaser.Scene{
         let beep = this.sound.add("beep")
 
         this.add.image(700,100,"navbar").setDepth(4).setScale(2.8)
-
      
         let audio=this.sound.add("letsPlay");
      
@@ -59,9 +59,22 @@ export class PlayGround extends Phaser.Scene{
         })
 
 
+                
 
-        
+        let note_btn= this.add.image(200,1740,"note_button").setDepth(3)
+        let note_btn2= this.add.image(550,1740,"note_button").setDepth(3)
+        let note_btn3= this.add.image(900,1740,"note_button").setDepth(3)
 
+
+        note_btn.setScale(200/note_btn.width,200/note_btn.height)
+        note_btn2.setScale(200/note_btn.width,200/note_btn.height)
+        note_btn3.setScale(200/note_btn.width,200/note_btn.height)
+
+        note_btn.setInteractive(); 
+        note_btn2.setInteractive(); 
+        note_btn3.setInteractive(); 
+
+    
         let orange_note= this.add.image(200,200,"orange_note").setDepth(3)
         let blue_note= this.add.image(550,200,"blue_note").setDepth(3)
         let pink_note= this.add.image(900,200,"pink_note").setDepth(3)
@@ -80,23 +93,48 @@ export class PlayGround extends Phaser.Scene{
             let new_orange_note=this.add.image(200,200,"orange_note").setDepth(3)
             new_orange_note.setScale(200/new_orange_note.width,200/new_orange_note.height)
             new_orange_note.setInteractive();
-        
+    
             this.tweens.add({
                 targets: new_orange_note,
                 y: 1800, 
                 ease: 'Linear',
                 duration: 3000,
                 onStart:()=>{
+               
+                    
                     new_orange_note.on("pointerdown",()=>{
-                        new_orange_note.destroy();
-                        scores++;
-                        scoreText.setText(`Points : ${scores}`)
+                            if (Phaser.Geom.Intersects.RectangleToRectangle(note_btn.getBounds(),new_orange_note.getBounds()))
+                            {
+                      
+                                    scores++;
+                                    new_orange_note.destroy();
+                                    scoreText.setText(`Points : ${scores}`)
+                                    console.log("orange pressed");
+                                }
+                                else{
+                                    beep.play();
+                                    // music.setVolume(0.2);
+                                    console.log("MISSED");
+                                    if (score<0) {
+                                        score=0;
+                                    }
+                                    else{
+                                        scores--;
+                                        scoreText.setText(`Points : ${scores}`)
+                                    }
 
+                                }
                     })
+       
+            
                 },
 
                 onComplete: () => {
+
                     new_orange_note.destroy();
+                    scores--;
+                    scoreText.setText(`Points : ${scores}`)
+
                 }
             });
     
@@ -109,19 +147,47 @@ export class PlayGround extends Phaser.Scene{
 
             this.tweens.add({
                 targets: blue_note,
-                y: 1800, 
+                y: 1800,
                 ease: 'Linear',
                 duration: 3000,
+            
                 onStart:()=>{
+               
+                    
                     blue_note.on("pointerdown",()=>{
-                        blue_note.destroy();
-                        scores++;
-                        scoreText.setText(`Points : ${scores}`)
+                            if (Phaser.Geom.Intersects.RectangleToRectangle(note_btn2.getBounds(),blue_note.getBounds()))
+                            {
+                      
+                                blue_note.destroy();
+                                    scores++;
+                                    scoreText.setText(`Points : ${scores}`)
+                                    console.log("blue_note pressed");
+                                }
+                                else{
+                                    beep.play();
+                                    // music.setVolume(0.2);
+                                    console.log("MISSED");
+                                    if (scores<0) {
+                                        scores=0;
+                                    }
+                                    else{
+                                        scores--;
+                                        scoreText.setText(`Points : ${scores}`)
+                                    }
+
+                                }
                     })
+
+        
+            
                 },
+
 
                 onComplete: () => {
                     blue_note.destroy();
+                    scores--;
+
+                    scoreText.setText(`Points : ${scores}`)
                     
                 }
             });
@@ -141,14 +207,42 @@ export class PlayGround extends Phaser.Scene{
                 ease: 'Linear',
                 duration: 3000,
                 onStart:()=>{
+               
+                    
                     pink_note.on("pointerdown",()=>{
-                        pink_note.destroy();
-                        scores++;
-                        scoreText.setText(`Points : ${scores}`)
+                            if (Phaser.Geom.Intersects.RectangleToRectangle(note_btn3.getBounds(),pink_note.getBounds()))
+                            {
+                                
+                                    pink_note.destroy();
+                                    scores++;
+                                    scoreText.setText(`Points : ${scores}`)
+                                    console.log("pink_note pressed");
+                                }
+                                else{
+
+                                        beep.play();
+                                        // music.setVolume(0.2);
+                                        console.log("MISSED");
+                                        if (scores<0) {
+                                            scores=0;
+                                        }
+                                        else{
+                                            scores--;
+                                            scoreText.setText(`Points : ${scores}`)
+                                        }
+
+
+                                }
                     })
+
+        
+            
                 },
                 onComplete: () => {
                     pink_note.destroy();
+                    scores--;
+                    scoreText.setText(`Points : ${scores}`)
+
                 }
             });
 
@@ -156,6 +250,8 @@ export class PlayGround extends Phaser.Scene{
 
    
         }
+
+
 
 
 
@@ -388,92 +484,97 @@ export class PlayGround extends Phaser.Scene{
 
                 
 
-    
-        let note_btn= this.add.image(200,1740,"note_button").setDepth(3)
-        let note_btn2= this.add.image(550,1740,"note_button").setDepth(3)
-        let note_btn3= this.add.image(900,1740,"note_button").setDepth(3)
-
-
-        note_btn.setScale(200/note_btn.width,200/note_btn.height)
-        note_btn2.setScale(200/note_btn.width,200/note_btn.height)
-        note_btn3.setScale(200/note_btn.width,200/note_btn.height)
-
-        note_btn.setInteractive(); 
-        note_btn2.setInteractive(); 
-        note_btn3.setInteractive(); 
+      
     
 
-        note_btn.on("pointerdown", () => {
-            note_btn.setTexture("note_button_pressed");
-
-            if (orange_note) {
-             let   orange_bounds=orange_note.getBounds();
-             let   note_btnbounds=note_btn.getBounds();
-             if (Phaser.Geom.Intersects.RectangleToRectangle(orange_bounds, note_btnbounds))
-                    {
-                    console.log("PERFECT ORANGE");
-                    music.setVolume(0.5); 
-                    orange_note.destroy();
-                }else{
-                    beep.play();
-                    // music.setVolume(0.2);
-                    console.log("MISSED");
-                    scores--;
-                    scoreText.setText(`Points : ${scores}`)
+    //     note_btn.on("pointerdown", () => {
+    //         note_btn.setTexture("note_button_pressed");
+    //         console.log("pressed");
+    //          if (Phaser.Geom.Intersects.RectangleToRectangle(orange_note.getBounds(), note_btn.getBounds()))
+    //             {
+    //                 console.log("PERFECT ORANGE");
+    //                 // music.setVolume(0.5); 
+    //                 orange_note.destroy();
+    //             }else{
+    //                 beep.play();
+    //                 // music.setVolume(0.2);
+    //                 console.log("MISSED");
+    //                 scores--;
+    //                 scoreText.setText(`Points : ${scores}`)
     
-                }
-            }});
+    //             }
+    // }       );
+
+
+    note_btn.on("pointerdown",()=>{
+
+        note_btn.setTexture("note_button_pressed");
+    })
+        
         note_btn.on("pointerup",()=>{
             note_btn.setTexture("note_button");
 
         })
         
 
-        note_btn2.on("pointerdown", () => {
-            note_btn2.setTexture("note_button_pressed");
+        // note_btn2.on("pointerdown", () => {
+        //     note_btn2.setTexture("note_button_pressed");
 
-            if (blue_note &&  Phaser.Geom.Intersects.RectangleToRectangle(blue_note.getBounds(), note_btn2.getBounds())) {
-                console.log("PERFECT BLUE");
-                blue_note.destroy();
-                music.setVolume(0.5);
-                // createOrangeNote();
+        //     if (blue_note &&  Phaser.Geom.Intersects.RectangleToRectangle(blue_note.getBounds(), note_btn2.getBounds())) {
+        //         console.log("PERFECT BLUE");
+        //         blue_note.destroy();
+        //         // music.setVolume(0.5);
+        //         // createOrangeNote();
          
-            } else {
-                beep.play();
-                // music.setVolume(0.2);
-                console.log("MISSED");
-                scores--;
-                scoreText.setText(`Points : ${scores}`)
-            }
-        });
+        //     } else {
+        //         beep.play();
+        //         // music.setVolume(0.2);
+        //         console.log("MISSED");
+        //         scores--;
+        //         scoreText.setText(`Points : ${scores}`)
+        //     }
+        // });
 
+
+
+    note_btn2.on("pointerdown",()=>{
+
+        note_btn2.setTexture("note_button_pressed");
+    })
+
+    
         note_btn2.on("pointerup",()=>{
             note_btn2.setTexture("note_button");
 
         })
 
 
-        note_btn3.on("pointerdown", () => {
-            note_btn3.setTexture("note_button_pressed");
+        // note_btn3.on("pointerdown", () => {
+        //     note_btn3.setTexture("note_button_pressed");
 
-            if (pink_note &&  Phaser.Geom.Intersects.RectangleToRectangle(pink_note.getBounds(), note_btn3.getBounds())) {
-                console.log("PERFECT PINK");
-                // music.setVolume(0.5); 
-                pink_note.destroy();
-            } else {
-                beep.play();
-                // music.setVolume(0.2);
-                console.log("MISSED");
-                scores--;
-                scoreText.setText(`Points : ${scores}`)
+        //     if (pink_note &&  Phaser.Geom.Intersects.RectangleToRectangle(pink_note.getBounds(), note_btn3.getBounds())) {
+        //         console.log("PERFECT PINK");
+        //         // music.setVolume(0.5); 
+        //         pink_note.destroy();
+        //     } else {
+        //         beep.play();
+        //         // music.setVolume(0.2);
+        //         console.log("MISSED");
+        //         scores--;
+        //         scoreText.setText(`Points : ${scores}`)
 
-            }
-        });
+        //     }
+        // });
+     
+     
+    note_btn3.on("pointerdown",()=>{
+
+        note_btn3.setTexture("note_button_pressed");
+    })
         note_btn3.on("pointerup",()=>{
             note_btn3.setTexture("note_button");
 
         })
-
         
 
     }
